@@ -4,6 +4,9 @@
    Adaptado por: Gilson Filho
 */
 
+// Assets 
+let tiles = document.getElementById("img-tiles");
+
 // Rotina principal
 
 const I = [
@@ -158,19 +161,19 @@ const Z = [
 ];
 
 const PECAS = [
-	[Z, "black"],
-	[S, "black"],
-	[T, "black"],
-	[O, "black"],
-	[L, "black"],
-	[I, "black"],
-	[J, "black"]
+	[Z, 0],
+	[S, 1],
+	[T, 2],
+	[O, 3],
+	[L, 4],
+	[I, 5],
+	[J, 6]
 ];
 
 const LINHA = 20;
 const COLUNA = 10;
 const TAMANHO = 20;
-const VAGO = "white";
+const VAGO = "black";
 
 var peca;
 var tabuleiro = [];
@@ -180,6 +183,9 @@ var fimDeJogo = false;
 
 var tela = document.getElementById("tela");
 var c = tela.getContext("2d");
+
+// deixa os tiles sem blur
+c.imageSmoothingEnabled = false;
 
 onkeydown = controlarPeca;
 
@@ -209,7 +215,11 @@ function iniciarTabuleiro() {
 function desenharTabuleiro() {
 	for (var i = 0; i < LINHA; i++) {
 		for (var j = 0; j < COLUNA; j++) {
-			desenharQuadrado(j, i, tabuleiro[i][j]);
+			if (tabuleiro[i][j] == VAGO) {
+				desenharQuadrado(j, i, tabuleiro[i][j]);
+			} else {
+				desenharTile(j, i, peca.tetraminoAtivo.cor);
+			}
 		}
 	}
 }
@@ -220,6 +230,12 @@ function desenharQuadrado(x, y, cor) {
 
 	c.strokeStyle = "black";
 	c.strokeRect(x * TAMANHO, y * TAMANHO, TAMANHO, TAMANHO);
+}
+
+function desenharTile(x, y, frame) {
+	let sx = 0;
+	let sy = frame * 8;
+	c.drawImage(tiles, sx, sy, 8, 8, x * TAMANHO, y * TAMANHO, TAMANHO, TAMANHO);
 }
 
 function gerarPeca() {
@@ -241,7 +257,7 @@ function descerPeca() {
 	var agora = Date.now();
 	var delta = agora - inicioDescida;
 
-	if (delta > 100) {
+	if (delta > 150) {
 		moverAbaixo();
 		inicioDescida = Date.now();
 	}
@@ -311,7 +327,7 @@ function apagarPeca() {
 }
 
 function desenharPeca() {
-	preencherPeca(peca.cor);
+	preencherTile(peca.cor);
 }
 
 function preencherPeca(cor) {
@@ -319,6 +335,16 @@ function preencherPeca(cor) {
 		for (var j = 0; j < peca.tetraminoAtivo.length; j++) {
 			if (peca.tetraminoAtivo[i][j]) {
 				desenharQuadrado(peca.x + j, peca.y + i, cor);
+			}
+		}
+	}
+}
+
+function preencherTile(frame) {
+	for (var i = 0; i < peca.tetraminoAtivo.length; i++) {
+		for (var j = 0; j < peca.tetraminoAtivo.length; j++) {
+			if (peca.tetraminoAtivo[i][j]) {
+				desenharTile(peca.x + j, peca.y + i, frame);
 			}
 		}
 	}

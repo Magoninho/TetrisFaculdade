@@ -1,0 +1,19 @@
+@font-face {
+	font-family: NESFont;
+	src: url("assets/sprites/nes.ttf");
+}
+body {
+	background-color: black;
+	font-family: NESFont;
+	color: white;
+}
+
+canvas {
+	border: 1px solid white;
+}
+
+#game-area {
+	display: flex;
+	justify-content: center;
+	gap: 50px;
+}
