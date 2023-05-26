@@ -8,9 +8,6 @@ body {
 	color: white;
 }
 
-canvas {
-	border: 1px solid white;
-}
 
 #game-area {
 	display: flex;

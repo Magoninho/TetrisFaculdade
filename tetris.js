@@ -6,6 +6,10 @@
 
 // Assets 
 let tiles = document.getElementById("img-tiles");
+let border = document.getElementById("img-playfield");
+let menu = document.getElementById("img-menu");
+
+let GAME_STATE = "menu";
 
 // Rotina principal
 
@@ -187,7 +191,9 @@ var c = tela.getContext("2d");
 // deixa os tiles sem blur
 c.imageSmoothingEnabled = false;
 
+
 onkeydown = controlarPeca;
+
 
 iniciarTabuleiro();
 
@@ -203,6 +209,7 @@ descerPeca();
 // Sub-rotinas (funções)
 
 function iniciarTabuleiro() {
+
 	for (var i = 0; i < LINHA; i++) {
 		tabuleiro[i] = [];
 
@@ -213,6 +220,7 @@ function iniciarTabuleiro() {
 }
 
 function desenharTabuleiro() {
+
 	for (var i = 0; i < LINHA; i++) {
 		for (var j = 0; j < COLUNA; j++) {
 			if (tabuleiro[i][j] == VAGO) {
@@ -226,16 +234,16 @@ function desenharTabuleiro() {
 
 function desenharQuadrado(x, y, cor) {
 	c.fillStyle = cor;
-	c.fillRect(x * TAMANHO, y * TAMANHO, TAMANHO, TAMANHO);
+	c.fillRect(x * TAMANHO + 128, y * TAMANHO + 12, TAMANHO, TAMANHO);
 
 	c.strokeStyle = "black";
-	c.strokeRect(x * TAMANHO, y * TAMANHO, TAMANHO, TAMANHO);
+	c.strokeRect(x * TAMANHO + 128, y * TAMANHO + 12, TAMANHO, TAMANHO);
 }
 
 function desenharTile(x, y, frame) {
 	let sx = 0;
 	let sy = frame * 8;
-	c.drawImage(tiles, sx, sy, 8, 8, x * TAMANHO, y * TAMANHO, TAMANHO, TAMANHO);
+	c.drawImage(tiles, sx, sy, 8, 8, x * TAMANHO + 128, y * TAMANHO + 12, TAMANHO, TAMANHO);
 }
 
 function gerarPeca() {
@@ -254,17 +262,26 @@ function gerarPeca() {
 }
 
 function descerPeca() {
+
 	var agora = Date.now();
 	var delta = agora - inicioDescida;
 
-	if (delta > 150) {
-		moverAbaixo();
-		inicioDescida = Date.now();
-	}
+	if (GAME_STATE == "menu") {
+		c.drawImage(menu, 0, 0, 504, 448)
+	} else {
+		c.drawImage(border, 112, 0, 232, 428);
 
+		if (delta > 150) {
+			moverAbaixo();
+			c.drawImage(border, 112, 0, 232, 428);
+			inicioDescida = Date.now();
+		}
+	}
 	if (!fimDeJogo) {
 		requestAnimationFrame(descerPeca);
 	}
+
+	
 }
 
 function moverAbaixo() {
@@ -358,7 +375,7 @@ function travarPeca() {
 			}
 
 			if (peca.y + i < 0) {
-				alert("Fim de Jogo");
+				//alert("Fim de Jogo");
 				fimDeJogo = true;
 				break;
 			}
@@ -413,6 +430,11 @@ function rodarPeca() {
 
 function controlarPeca(evento) {
 	var tecla = evento.keyCode;
+
+	if (GAME_STATE == "menu" && tecla == 13) {
+		c.clearRect(0, 0, 504, 448);
+		GAME_STATE = "game";
+	}
 
 	if (tecla == 37) {
 		moverEsquerda();
