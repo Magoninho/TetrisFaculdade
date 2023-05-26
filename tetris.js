@@ -15,11 +15,11 @@ let menu = document.getElementById("img-menu");
 let titlescreen = document.getElementById("audio-title");
 let theme = document.getElementById("audio-theme");
 
-let currentTheme = Math.floor(Math.random() * 4) + 1;
+let currentTheme = Math.floor(Math.random() * 4);
 theme.src = `assets/music/theme${currentTheme}.mp3`;
 
 theme.onended = () => {
-	currentTheme++;
+	currentTheme = (currentTheme + 1) % 4;
 	theme.src = `assets/music/theme${currentTheme}.mp3`;
 	theme.load();
 	theme.play();
