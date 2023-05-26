@@ -5,9 +5,28 @@
 */
 
 // Assets 
+
+// images
 let tiles = document.getElementById("img-tiles");
 let border = document.getElementById("img-playfield");
 let menu = document.getElementById("img-menu");
+
+// audio
+let titlescreen = document.getElementById("audio-title");
+let theme = document.getElementById("audio-theme");
+
+let currentTheme = Math.floor(Math.random() * 4) + 1;
+theme.src = `assets/music/theme${currentTheme}.mp3`;
+
+theme.onended = () => {
+	currentTheme++;
+	theme.src = `assets/music/theme${currentTheme}.mp3`;
+	theme.load();
+	theme.play();
+}
+
+titlescreen.play();
+
 
 let GAME_STATE = "menu";
 
@@ -266,12 +285,22 @@ function descerPeca() {
 	var agora = Date.now();
 	var delta = agora - inicioDescida;
 
+
+
 	if (GAME_STATE == "menu") {
 		c.drawImage(menu, 0, 0, 504, 448)
-	} else {
+	} else if (GAME_STATE == "gameover") {
+		c.clearRect(0, 0, 504, 448);
+		c.font = "30px NESFont";
+		c.fillStyle = "red";
+		c.textAlign = "center";
+		c.fillText("GAME OVER", tela.width / 2, tela.height / 2);
+	} else if (GAME_STATE == "game") {
 		c.drawImage(border, 112, 0, 232, 428);
 
+
 		if (delta > 150) {
+
 			moverAbaixo();
 			c.drawImage(border, 112, 0, 232, 428);
 			inicioDescida = Date.now();
@@ -281,7 +310,7 @@ function descerPeca() {
 		requestAnimationFrame(descerPeca);
 	}
 
-	
+
 }
 
 function moverAbaixo() {
@@ -375,8 +404,8 @@ function travarPeca() {
 			}
 
 			if (peca.y + i < 0) {
-				//alert("Fim de Jogo");
-				fimDeJogo = true;
+				// fim de jogo
+				GAME_STATE = "gameover";
 				break;
 			}
 
@@ -433,6 +462,8 @@ function controlarPeca(evento) {
 
 	if (GAME_STATE == "menu" && tecla == 13) {
 		c.clearRect(0, 0, 504, 448);
+		titlescreen.load();
+		theme.play();
 		GAME_STATE = "game";
 	}
 
