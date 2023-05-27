@@ -14,3 +14,12 @@ body {
 	justify-content: center;
 	gap: 50px;
 }
+
+.pieces {
+	width: 60px;
+	image-rendering: pixelated;
+}
+
+tr {
+	height: 100px;
+}

@@ -375,7 +375,7 @@ function descerPeca() {
 		c.drawImage(border, 112, 0, 232, 428);
 		desenharProximasPecas()
 
-		if (delta > 250) {
+		if (delta > 1000) {
 
 			moverAbaixo();
 			c.drawImage(border, 112, 0, 232, 428);
