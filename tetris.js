@@ -199,6 +199,7 @@ const TAMANHO = 20;
 const VAGO = "black";
 
 var peca;
+var proximasPecas = [];
 var tabuleiro = [];
 
 var inicioDescida;
@@ -223,6 +224,8 @@ gerarPeca();
 inicioDescida = Date.now();
 
 descerPeca();
+
+
 
 
 // Sub-rotinas (funções)
@@ -278,6 +281,79 @@ function gerarPeca() {
 	};
 
 	peca.tetraminoAtivo = peca.tetramino[peca.tetraminoN];
+
+	// gerar mais 3 peças para serem as proximas
+	// depois, esta função não será mais utilizada
+	for (let i = 0; i < 3; i++) {
+		r = Math.floor(Math.random() * PECAS.length);
+		proximasPecas.push(
+			{
+				tetramino: PECAS[r][0],
+				cor: PECAS[r][1],
+				tetraminoN: 0,
+				tetraminoAtivo: [[]],
+				x: 3,
+				y: -2
+			}
+		);
+		proximasPecas[i].tetraminoAtivo = proximasPecas[i].tetramino[proximasPecas[i].tetraminoN];
+	}
+	console.log(proximasPecas);
+}
+
+function proximaPeca() {
+	peca = proximasPecas[0];
+
+	var r = Math.floor(Math.random() * PECAS.length);
+	proximasPecas.push(
+		{
+			tetramino: PECAS[r][0],
+			cor: PECAS[r][1],
+			tetraminoN: 0,
+			tetraminoAtivo: [[]],
+			x: 3,
+			y: -2
+		}
+	);
+	proximasPecas[3].tetraminoAtivo = proximasPecas[3].tetramino[proximasPecas[3].tetraminoN];
+
+	proximasPecas = proximasPecas.slice(1); // removendo a primeira peça
+	console.log(proximasPecas);
+	console.log(peca);
+}
+
+function desenharProximasPecas() {
+	let images = document.getElementsByClassName("pieces");
+
+	for (let i = 0; i < 3; i++) {
+		switch (proximasPecas[i].tetramino) {
+			case O:
+				images[i].src = `assets/sprites/pieces/O.png`;
+				break;
+			case I:
+				images[i].src = `assets/sprites/pieces/I.png`;
+				break;
+			case J:
+				images[i].src = `assets/sprites/pieces/J.png`;
+				break;
+			case L:
+				images[i].src = `assets/sprites/pieces/L.png`;
+				break;
+			case S:
+				images[i].src = `assets/sprites/pieces/S.png`;
+				break;
+			case T:
+				images[i].src = `assets/sprites/pieces/T.png`;
+				break;
+			case Z:
+				images[i].src = `assets/sprites/pieces/Z.png`;
+				break;
+
+			default:
+				break;
+		}
+	}
+
 }
 
 function descerPeca() {
@@ -297,9 +373,9 @@ function descerPeca() {
 		c.fillText("GAME OVER", tela.width / 2, tela.height / 2);
 	} else if (GAME_STATE == "game") {
 		c.drawImage(border, 112, 0, 232, 428);
+		desenharProximasPecas()
 
-
-		if (delta > 150) {
+		if (delta > 250) {
 
 			moverAbaixo();
 			c.drawImage(border, 112, 0, 232, 428);
@@ -320,7 +396,7 @@ function moverAbaixo() {
 		desenharPeca();
 	} else {
 		travarPeca();
-		gerarPeca();
+		proximaPeca();
 	}
 
 }
