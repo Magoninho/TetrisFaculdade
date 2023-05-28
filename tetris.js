@@ -215,9 +215,10 @@ var tabuleiro = [];
 var inicioDescida;
 var fimDeJogo = false;
 
-let nivel = 0;
+let nivel = 1;
 let linhasDoNivel = 0;
 let linhasTotais = 0;
+let pontos = 0;
 let tempo = 1000; // 1 segundo
 
 var tela = document.getElementById("tela");
@@ -413,6 +414,7 @@ function moverAbaixo() {
 	if (!colisao(0, 1, peca.tetraminoAtivo)) {
 		apagarPeca();
 		peca.y++;
+		pontos++;
 		desenharPeca();
 	} else {
 		travarPeca();
@@ -492,15 +494,33 @@ function preencherTile(frame) {
 	}
 }
 
-function atualizaPontos() {
+function atualizaPontos(linhasTravadas) {
 	if (linhasDoNivel >= 10) {
 		nivel++;
 		tempo *= 0.7;
 		linhasDoNivel = 0;
 	}
 
+	switch (linhasTravadas) {
+		case 1:
+			pontos += 100 * nivel;
+			break;
+		case 2:
+			pontos += 300 * nivel;
+			break;
+		case 3:
+			pontos += 500 * nivel;
+			break;
+		case 4:
+			pontos += 800 * nivel; // TETRIS
+			break;
+		default:
+			break;
+	}
+
 	// renderizar
 	document.getElementById("h1-lines").innerText = `${pad(linhasTotais, 5)} LINHAS`;
+	document.getElementById("h1-pts").innerText = `${pad(pontos, 5)} PTS`
 	document.getElementById("h1-level").innerText = `LEVEL ${nivel}`;
 }
 
@@ -521,27 +541,29 @@ function travarPeca() {
 		}
 	}
 
+	let l = 0; // contador de linhas para calcular os pontos
 	for (var i = 0; i < LINHA; i++) {
 		var linhaCheia = true;
 
 		for (var j = 0; j < COLUNA; j++) {
 			linhaCheia = linhaCheia && (tabuleiro[i][j] != VAGO);
 		}
-
+		
 		if (linhaCheia) {
+			l++;
 			linhasDoNivel++;
 			linhasTotais++;
-			atualizaPontos();
 			for (var y = i; y > 1; y--) {
 				for (var j = 0; j < COLUNA; j++) {
 					tabuleiro[y][j] = tabuleiro[y - 1][j];
 				}
 			}
-
+			
 			for (var j = 0; j < COLUNA; j++) {
 				tabuleiro[0][j] = VAGO;
 			}
 		}
+		atualizaPontos(l);
 	}
 
 	desenharTabuleiro();
