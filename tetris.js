@@ -18,11 +18,11 @@ let theme = document.getElementById("audio-theme");
 // UI
 let level = document.getElementById("");
 
-let currentTheme = Math.floor(Math.random() * 4);
+let currentTheme = Math.floor(Math.random() * 5);
 theme.src = `assets/music/theme${currentTheme}.mp3`;
 
 theme.onended = () => {
-	currentTheme = (currentTheme + 1) % 4;
+	currentTheme = (currentTheme + 1) % 5;
 	theme.src = `assets/music/theme${currentTheme}.mp3`;
 	theme.load();
 	theme.play();
@@ -383,6 +383,7 @@ function descerPeca() {
 	if (GAME_STATE == "menu") {
 		c.drawImage(menu, 0, 0, 504, 448)
 	} else if (GAME_STATE == "gameover") {
+		onkeydown = null;
 		c.clearRect(0, 0, 504, 448);
 		c.font = "30px NESFont";
 		c.fillStyle = "red";
@@ -411,6 +412,8 @@ function descerPeca() {
 }
 
 function moverAbaixo() {
+	document.getElementById("audio-move").load();
+	document.getElementById("audio-move").play();
 	if (!colisao(0, 1, peca.tetraminoAtivo)) {
 		apagarPeca();
 		peca.y++;
@@ -424,6 +427,8 @@ function moverAbaixo() {
 }
 
 function moverDireita() {
+	document.getElementById("audio-move").load();
+	document.getElementById("audio-move").play();
 	if (!colisao(1, 0, peca.tetraminoAtivo)) {
 		apagarPeca();
 		peca.x++;
@@ -432,6 +437,8 @@ function moverDireita() {
 }
 
 function moverEsquerda() {
+	document.getElementById("audio-move").load();
+	document.getElementById("audio-move").play();
 	if (!colisao(-1, 0, peca.tetraminoAtivo)) {
 		apagarPeca();
 		peca.x--;
@@ -533,11 +540,16 @@ function travarPeca() {
 
 			if (peca.y + i < 0) {
 				// fim de jogo
+				theme.load();
+				
+				document.getElementById("audio-crash").play();
+				document.getElementById("audio-gameover").play();
 				GAME_STATE = "gameover";
 				break;
 			}
 
 			tabuleiro[peca.y + i][peca.x + j] = peca.cor;
+			document.getElementById("audio-stick").play();
 		}
 	}
 
@@ -550,6 +562,7 @@ function travarPeca() {
 		}
 		
 		if (linhaCheia) {
+			document.getElementById("audio-line").play();
 			l++;
 			linhasDoNivel++;
 			linhasTotais++;
@@ -570,6 +583,10 @@ function travarPeca() {
 }
 
 function rodarPeca() {
+	document.getElementById("audio-rotate").load();
+	document.getElementById("audio-rotate").play();
+
+
 	var proximoPadrao = peca.tetramino[(peca.tetraminoN + 1) % peca.tetramino.length];
 	var recuo = 0;
 
