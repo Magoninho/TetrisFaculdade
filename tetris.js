@@ -603,13 +603,13 @@ function controlarPeca(evento) {
 	if (tecla == 37) {
 		moverEsquerda();
 		inicioDescida = Date.now();
-	} else if (tecla == 38) {
+	} else if (tecla == 90) {
 		rodarPeca();
 		inicioDescida = Date.now();
 	} else if (tecla == 39) {
 		moverDireita();
 		inicioDescida = Date.now();
-	} else if (tecla == 40) {
+	} else if (tecla == 32) {
 		moverAbaixo();
 	}
 }
