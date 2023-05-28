@@ -241,12 +241,15 @@ inicioDescida = Date.now();
 descerPeca();
 
 
-
+function pad(num, size) {
+    num = num.toString();
+    while (num.length < size) num = "0" + num;
+    return num;
+}
 
 // Sub-rotinas (funções)
 
 function iniciarTabuleiro() {
-
 	for (var i = 0; i < LINHA; i++) {
 		tabuleiro[i] = [];
 
@@ -385,8 +388,12 @@ function descerPeca() {
 		c.textAlign = "center";
 		c.fillText("GAME OVER", tela.width / 2, tela.height / 2);
 	} else if (GAME_STATE == "game") {
+
+		document.getElementById("stats").style.display = "initial";
+		document.getElementById("next").style.display = "initial";
+
 		c.drawImage(border, 112, 0, 232, 428);
-		desenharProximasPecas()
+		desenharProximasPecas();
 
 		if (delta > tempo) {
 
@@ -485,9 +492,7 @@ function preencherTile(frame) {
 	}
 }
 
-function proximoNivel() {
-	linhasDoNivel++;
-	linhasTotais++;
+function atualizaPontos() {
 	if (linhasDoNivel >= 10) {
 		nivel++;
 		tempo *= 0.7;
@@ -495,6 +500,8 @@ function proximoNivel() {
 	}
 
 	// renderizar
+	document.getElementById("h1-lines").innerText = `${pad(linhasTotais, 5)} LINHAS`;
+	document.getElementById("h1-level").innerText = `LEVEL ${nivel}`;
 }
 
 function travarPeca() {
@@ -522,7 +529,9 @@ function travarPeca() {
 		}
 
 		if (linhaCheia) {
-			proximoNivel();
+			linhasDoNivel++;
+			linhasTotais++;
+			atualizaPontos();
 			for (var y = i; y > 1; y--) {
 				for (var j = 0; j < COLUNA; j++) {
 					tabuleiro[y][j] = tabuleiro[y - 1][j];
