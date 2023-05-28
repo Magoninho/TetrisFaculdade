@@ -15,6 +15,9 @@ let menu = document.getElementById("img-menu");
 let titlescreen = document.getElementById("audio-title");
 let theme = document.getElementById("audio-theme");
 
+// UI
+let level = document.getElementById("");
+
 let currentTheme = Math.floor(Math.random() * 4);
 theme.src = `assets/music/theme${currentTheme}.mp3`;
 
@@ -25,10 +28,17 @@ theme.onended = () => {
 	theme.play();
 }
 
-titlescreen.play();
+titlescreen.play(); // musica do menu
 
 
 let GAME_STATE = "menu";
+
+let playerInfo = {
+	name: "",
+	score: 0,
+	level: 1,
+};
+
 
 // Rotina principal
 
@@ -205,6 +215,11 @@ var tabuleiro = [];
 var inicioDescida;
 var fimDeJogo = false;
 
+let nivel = 0;
+let linhasDoNivel = 0;
+let linhasTotais = 0;
+let tempo = 1000; // 1 segundo
+
 var tela = document.getElementById("tela");
 var c = tela.getContext("2d");
 
@@ -361,8 +376,6 @@ function descerPeca() {
 	var agora = Date.now();
 	var delta = agora - inicioDescida;
 
-
-
 	if (GAME_STATE == "menu") {
 		c.drawImage(menu, 0, 0, 504, 448)
 	} else if (GAME_STATE == "gameover") {
@@ -375,7 +388,7 @@ function descerPeca() {
 		c.drawImage(border, 112, 0, 232, 428);
 		desenharProximasPecas()
 
-		if (delta > 1000) {
+		if (delta > tempo) {
 
 			moverAbaixo();
 			c.drawImage(border, 112, 0, 232, 428);
@@ -472,6 +485,18 @@ function preencherTile(frame) {
 	}
 }
 
+function proximoNivel() {
+	linhasDoNivel++;
+	linhasTotais++;
+	if (linhasDoNivel >= 10) {
+		nivel++;
+		tempo *= 0.7;
+		linhasDoNivel = 0;
+	}
+
+	// renderizar
+}
+
 function travarPeca() {
 	for (var i = 0; i < peca.tetraminoAtivo.length; i++) {
 		for (var j = 0; j < peca.tetraminoAtivo.length; j++) {
@@ -497,6 +522,7 @@ function travarPeca() {
 		}
 
 		if (linhaCheia) {
+			proximoNivel();
 			for (var y = i; y > 1; y--) {
 				for (var j = 0; j < COLUNA; j++) {
 					tabuleiro[y][j] = tabuleiro[y - 1][j];
