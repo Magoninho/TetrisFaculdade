@@ -20,6 +20,28 @@ body {
 	image-rendering: pixelated;
 }
 
+#ranking {
+	justify-content: center;
+}
+
 tr {
 	height: 100px;
+}
+
+ul {
+	list-style: none;
+	line-height: 50px;
+	
+}
+button {
+	font-family: NESFont;
+	cursor: pointer;
+	font-size: larger;
+	height: 40px;
+}
+
+ul img {
+	width: 50px;
+	image-rendering: pixelated;
+	vertical-align: middle;
 }

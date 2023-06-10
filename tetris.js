@@ -16,7 +16,7 @@ let titlescreen = document.getElementById("audio-title");
 let theme = document.getElementById("audio-theme");
 
 // UI
-let level = document.getElementById("");
+let level = document.getElementById("h1-level");
 
 let currentTheme = Math.floor(Math.random() * 5);
 theme.src = `assets/music/theme${currentTheme}.mp3`;
@@ -33,12 +33,17 @@ titlescreen.play(); // musica do menu
 
 let GAME_STATE = "menu";
 
-let playerInfo = {
-	name: "",
-	score: 0,
-	level: 1,
-};
+let ranking = new Ranking();
 
+let estatisticas = {
+	O: 0,
+	S: 0,
+	T: 0,
+	L: 0,
+	I: 0,
+	J: 0,
+	Z: 0
+}
 
 // Rotina principal
 
@@ -243,9 +248,9 @@ descerPeca();
 
 
 function pad(num, size) {
-    num = num.toString();
-    while (num.length < size) num = "0" + num;
-    return num;
+	num = num.toString();
+	while (num.length < size) num = "0" + num;
+	return num;
 }
 
 // Sub-rotinas (funções)
@@ -298,6 +303,7 @@ function gerarPeca() {
 		x: 3,
 		y: -2
 	};
+	adicionarEstatisticaPeca(peca);
 
 	peca.tetraminoAtivo = peca.tetramino[peca.tetraminoN];
 
@@ -317,11 +323,40 @@ function gerarPeca() {
 		);
 		proximasPecas[i].tetraminoAtivo = proximasPecas[i].tetramino[proximasPecas[i].tetraminoN];
 	}
-	console.log(proximasPecas);
+	
+}
+
+function adicionarEstatisticaPeca(peca) {
+	switch (peca.tetramino) {
+		case O:
+			estatisticas.O++;
+			break;
+		case I:
+			estatisticas.I++;
+			break;
+		case J:
+			estatisticas.J++;
+			break;
+		case L:
+			estatisticas.L++;
+			break;
+		case S:
+			estatisticas.S++;
+			break;
+		case T:
+			estatisticas.T++;
+			break;
+		case Z:
+			estatisticas.Z++;
+			break;
+		default:
+			break;
+	}
 }
 
 function proximaPeca() {
 	peca = proximasPecas[0];
+	adicionarEstatisticaPeca(peca);
 
 	var r = Math.floor(Math.random() * PECAS.length);
 	proximasPecas.push(
@@ -337,8 +372,6 @@ function proximaPeca() {
 	proximasPecas[3].tetraminoAtivo = proximasPecas[3].tetramino[proximasPecas[3].tetraminoN];
 
 	proximasPecas = proximasPecas.slice(1); // removendo a primeira peça
-	console.log(proximasPecas);
-	console.log(peca);
 }
 
 function desenharProximasPecas() {
@@ -531,6 +564,15 @@ function atualizaPontos(linhasTravadas) {
 	document.getElementById("h1-level").innerText = `LEVEL ${nivel}`;
 }
 
+function updateStats() {
+	let spans = document.getElementsByClassName("stats-pieces");
+	let values = Object.values(estatisticas)
+	for (let s = 0; s < spans.length; s++) {
+		const span = spans[s];
+		span.innerText = values[s];
+	}
+}
+
 function travarPeca() {
 	for (var i = 0; i < peca.tetraminoAtivo.length; i++) {
 		for (var j = 0; j < peca.tetraminoAtivo.length; j++) {
@@ -540,12 +582,18 @@ function travarPeca() {
 
 			if (peca.y + i < 0) {
 				// fim de jogo
+				document.getElementById("statistics").style.display = "initial";
+				document.getElementById("next").style.display = "none";
+				updateStats();
 				theme.load();
-				
+				setTimeout(() => {
+					ranking.registerPlayer(pontos);
+					ranking.renderRanking();
+				}, 2000);
 				document.getElementById("audio-crash").play();
 				document.getElementById("audio-gameover").play();
 				GAME_STATE = "gameover";
-				break;
+				return;
 			}
 
 			tabuleiro[peca.y + i][peca.x + j] = peca.cor;
@@ -560,7 +608,7 @@ function travarPeca() {
 		for (var j = 0; j < COLUNA; j++) {
 			linhaCheia = linhaCheia && (tabuleiro[i][j] != VAGO);
 		}
-		
+
 		if (linhaCheia) {
 			document.getElementById("audio-line").play();
 			l++;
@@ -571,7 +619,7 @@ function travarPeca() {
 					tabuleiro[y][j] = tabuleiro[y - 1][j];
 				}
 			}
-			
+
 			for (var j = 0; j < COLUNA; j++) {
 				tabuleiro[0][j] = VAGO;
 			}

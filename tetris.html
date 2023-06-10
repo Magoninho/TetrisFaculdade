@@ -18,12 +18,24 @@
 	<audio src="assets/music/sfx/line.mp3" id="audio-line"></audio>
 	<audio src="assets/music/sfx/rotate.mp3" id="audio-rotate"></audio>
 	<audio src="assets/music/sfx/crash.mp3" id="audio-crash"></audio>
+
+
+	<div id="ranking" style="display: none;">
+		<div>
+			<h1>RANKING</h1>
+			<h2 id="h2-ranking"></h2>
+			<a href="tetris.html"><button>JOGAR NOVAMENTE</button></a>	
+		</div>
+	</div>
+
 	<div id="game-area">
 		<div style="display: none;" id="stats">
 			<h2 id="h1-level">LEVEL 1</h2>
 			<h2 id="h1-pts">00000   PTS</h2>
 			<h2 id="h1-lines">00000 LINHAS</h2>
 		</div>
+
+		<!-- TODO: RANKING -->
 
 		<div id="game-canvas">
 			<canvas id="tela" width="504" height="448"></canvas>
@@ -43,12 +55,26 @@
 				</tr>
 			</table>
 		</div>
+
+		<div id="statistics" style="display: none;">
+			<h1>STATS</h1>
+			<ul>
+				<li><img src="assets/sprites/pieces/O.png"> <span class="stats-pieces">0</span></li>
+				<li><img src="assets/sprites/pieces/S.png"> <span class="stats-pieces">0</span></li>
+				<li><img src="assets/sprites/pieces/T.png"> <span class="stats-pieces">0</span></li>
+				<li><img src="assets/sprites/pieces/L.png"> <span class="stats-pieces">0</span></li>
+				<li><img src="assets/sprites/pieces/I.png"> <span class="stats-pieces">0</span></li>
+				<li><img src="assets/sprites/pieces/J.png"> <span class="stats-pieces">0</span></li>
+				<li><img src="assets/sprites/pieces/Z.png"> <span class="stats-pieces">0</span></li>
+			</ul>
+		</div>
 	</div>
 
 	<img src="assets/sprites/tiles.png" id="img-tiles" style="display: none;" alt="">
 	<img src="assets/sprites/playfield.png" id="img-playfield" style="display: none;" alt="">
 	<img src="assets/sprites/menu.png" id="img-menu" style="display: none;" alt="">
-	<script src="tetris.js"></script>
+	<script src="ranking.js" defer></script>
+	<script src="tetris.js" defer></script>
 </body>
 
 </html>
