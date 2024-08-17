@@ -1,4 +1,4 @@
-# Tetris Da Faculdade
+# Tetris
 ![done](https://img.shields.io/badge/status-done-lightgreen)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/22628332-e876-4d1a-a7e4-1cf511b191f8/deploy-status)](https://app.netlify.com/sites/tetris-unifor/deploys)
 
